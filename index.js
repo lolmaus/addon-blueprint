@@ -39,7 +39,7 @@ module.exports = {
     if (!options.addonOnly) {
       if (fs.existsSync(path.join('..', 'package.json'))) {
         options.ui.writeInfoLine(
-          "Existing monorepo detected! The blueprint will only create the addon and test-app folders, and omit any other files in the repo's root folder."
+          "Existing monorepo detected! The blueprint will only create the addon and test-app folders, and omit any other files in the repo's root folder.",
         );
 
         this.isExistingMonorepo = true;
@@ -80,7 +80,7 @@ module.exports = {
           }
 
           await fs.writeFile(packageJson, JSON.stringify(json, null, 2));
-        })()
+        })(),
       );
 
       if (options.pnpm) {
@@ -98,7 +98,7 @@ module.exports = {
       await this.moveFilesForExistingMonorepo(options);
 
       this.ui.writeWarnLine(
-        `Make sure your workspaces are configured correctly to cover the newly created ${addonInfo.location} and ${testAppInfo.location} packages!`
+        `Make sure your workspaces are configured correctly to cover the newly created ${addonInfo.location} and ${testAppInfo.location} packages!`,
       );
     }
 
@@ -119,7 +119,7 @@ module.exports = {
     assert(
       !options.addonOnly,
       `When in --addon-only mode, we don't need to move files within an existing monorepo. ` +
-        `If you see this error, please open an issue at: https://github.com/embroider-build/addon-blueprint/issues`
+        `If you see this error, please open an issue at: https://github.com/embroider-build/addon-blueprint/issues`,
     );
 
     let addonInfo = addonInfoFromOptions(options);
@@ -152,7 +152,7 @@ module.exports = {
     assert(
       !options.addonOnly,
       `When in --addon-only mode, we don't create a test-app. ` +
-        `If you see this error, please open an issue at: https://github.com/embroider-build/addon-blueprint/issues`
+        `If you see this error, please open an issue at: https://github.com/embroider-build/addon-blueprint/issues`,
     );
 
     const appBlueprint = this.lookupBlueprint('app');
@@ -191,11 +191,11 @@ module.exports = {
 
       if (lt(hasVersion, needsVersion)) {
         this.ui.writeWarnLine(
-          `Your version ${hasVersion} of Ember CLI does not support the --typescript flag yet. Please run \`ember install ember-cli-typescript\` in the ${testAppInfo.location} folder manually!`
+          `Your version ${hasVersion} of Ember CLI does not support the --typescript flag yet. Please run \`ember install ember-cli-typescript\` in the ${testAppInfo.location} folder manually!`,
         );
       } else if (lt(hasVersion, recommendedVersion)) {
         this.ui.writeWarnLine(
-          `We recommend using Ember CLI >= ${recommendedVersion} for the best blueprint support when using TypeScript!`
+          `We recommend using Ember CLI >= ${recommendedVersion} for the best blueprint support when using TypeScript!`,
         );
       }
     }
@@ -272,9 +272,10 @@ module.exports = {
       addonNamespace: addonInfo.name.classified,
       blueprintVersion: require('./package.json').version,
       year: date.getFullYear(),
-      yarn: options.yarn,
-      pnpm: options.pnpm,
-      npm: options.npm,
+      packageManager: options.packageManager,
+      yarn: options.yarn || options.packageManager === 'yarn',
+      pnpm: options.pnpm || options.packageManager === 'pnpm',
+      npm: options.npm || options.packageManager === 'npm',
       typescript: options.typescript,
       ext: options.typescript ? 'ts' : 'js',
       blueprint: 'addon',
@@ -310,7 +311,7 @@ module.exports = {
       let ignoredFiles = ['__addonLocation__/tsconfig.json'];
 
       files = files.filter(
-        (filename) => !filename.match(/.*\.ts$/) && !ignoredFiles.includes(filename)
+        (filename) => !filename.match(/.*\.ts$/) && !ignoredFiles.includes(filename),
       );
     }
 
@@ -326,7 +327,7 @@ module.exports = {
     if (!this.yarn) {
       let ignoredFiles = ['.yarnrc.yml'];
 
-      files = files.filter(filename => !ignoredFiles.includes(filename));
+      files = files.filter((filename) => !ignoredFiles.includes(filename));
     }
 
     return files;
@@ -337,7 +338,7 @@ module.exports = {
 
     if (this.project.isEmberCLIProject() && !this.project.isEmberCLIAddon()) {
       throw new SilentError(
-        'Generating an addon in an existing ember-cli project is not supported.'
+        'Generating an addon in an existing ember-cli project is not supported.',
       );
     }
 
