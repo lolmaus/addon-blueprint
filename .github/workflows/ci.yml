@@ -71,7 +71,7 @@ jobs:
 
 
   defaults_tests:
-    name: Defaults w/ ember-cli@${{ matrix.ember-cli }}
+    name: "ember-cli@${{ matrix.ember-cli }} : ${{ matrix.slow-test }}"
     timeout-minutes: 5
     runs-on: ubuntu-latest
     strategy:
